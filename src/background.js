@@ -14,9 +14,20 @@ function waitForAuthOrDownload(theTabId, i) {
     chrome.downloads.onCreated.removeListener(onDownloading);
     chrome.tabs.onUpdated.removeListener(onTabs);
     chrome.downloads.onChanged.addListener(function onDownloaded(download) {
-      if (download.endTime && theDownload.id === download.id) {
-        console.log('done!');
-        autoDownload(i + 1);
+      if (theDownload.id === download.id && download.state) {
+        console.log(download);
+        switch (download.state.current) {
+          case 'complete':
+            console.log(`completed ${i}!`);
+            autoDownload(i + 1);
+            break;
+          case 'interrupted':
+            console.log(`retrying ${i}`)
+            autoDownload(i);
+            break;
+          default:
+            break;
+        }
       }
     });
   });
