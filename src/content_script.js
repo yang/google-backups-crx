@@ -10,16 +10,20 @@ function getLeafs(txt, requireVisible) {
     )
 }
 
+function getDownload2(i) {
+  // Doesn't instantaneously show.
+  if (getLeafs('Download', true).length < 3)
+    setTimeout(() => getDownload2(i), 1000);
+  else if (i >= getLeafs('Download', true).length)
+    alert('Done with all the Google Downloads!');
+  else
+    getLeafs('Download', true)[i].click();
+}
+
 function getDownload(i) {
   if (getLeafs('Download', true).length == 0)
     getLeafs('Show exports', false)[0].click();
-  // Doesn't instantaneously show.
-  setTimeout(function() {
-    if (i >= getLeafs('Download', true).length)
-      alert('Done with all the Google Downloads!');
-    else
-      getLeafs('Download', true)[i].click();
-  }, 1000);
+  getDownload2(i);
 }
 
 function login() {
