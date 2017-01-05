@@ -38,8 +38,10 @@ function autoDownload(i) {
     chrome.tabs.onUpdated.addListener(function onTabs(tabId, changeInfo, tab) {
       if (tabId === theTab.id && changeInfo.status === 'complete' && tab.url === 'https://takeout.google.com/settings/takeout/downloads') {
         chrome.tabs.onUpdated.removeListener(onTabs);
-        chrome.tabs.executeScript(tab.id, {file: "src/content_script.js"}, () => {
-          chrome.tabs.executeScript(tab.id, {code: `getDownload(${i})`}, () => {
+        chrome.tabs.executeScript(tab.id, {file: "src/content_script.js"}, function() {
+          console.log('autoDownload executeScript(content_script)', arguments);
+          chrome.tabs.executeScript(tab.id, {code: `getDownload(${i})`}, function() {
+            console.log('autoDownload executeScript(getDownload)', arguments);
             waitForAuthOrDownload(tab.id, i);
           });
         });
