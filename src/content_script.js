@@ -28,6 +28,10 @@ function getDownload(i) {
 
 function login() {
   let passwd = document.getElementById('Passwd');
-  passwd.value = 'XXX FILL ME IN';
-  passwd.form.submit();
+  if (!passwd) {
+    setTimeout(login, 1000);
+  } else {
+    passwd.value = 'XXX FILL ME IN';
+    passwd.form.submit();
+  }
 }
