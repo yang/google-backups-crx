@@ -27,11 +27,11 @@ function getDownload(i) {
 }
 
 function login() {
-  let passwd = document.getElementById('Passwd');
+  let passwd = document.querySelector('input[type="password"]');
   if (!passwd) {
     setTimeout(login, 1000);
   } else {
     passwd.value = 'XXX FILL ME IN';
-    passwd.form.submit();
+    document.getElementById('passwordNext').click();
   }
 }
