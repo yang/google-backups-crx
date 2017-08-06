@@ -32,6 +32,8 @@ function login() {
     setTimeout(login, 1000);
   } else {
     passwd.value = 'XXX FILL ME IN';
-    document.getElementById('passwordNext').click();
+    var submit = document.getElementById('passwordNext') ||
+      document.querySelector('input[type="submit"]');
+    submit.click();
   }
 }
