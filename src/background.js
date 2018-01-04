@@ -33,15 +33,24 @@ function waitForAuthOrDownload(theTabId, i) {
   });
 }
 
-function autoDownload(i) {
+function autoDownload(i, retry = 0) {
+  if (retry > 5) return;
   chrome.tabs.create({url: 'https://takeout.google.com/settings/takeout/downloads'}, (theTab) => {
     chrome.tabs.onUpdated.addListener(function onTabs(tabId, changeInfo, tab) {
       if (tabId === theTab.id && changeInfo.status === 'complete' && tab.url === 'https://takeout.google.com/settings/takeout/downloads') {
         chrome.tabs.onUpdated.removeListener(onTabs);
         chrome.tabs.executeScript(tab.id, {file: "src/content_script.js"}, function() {
           console.log('autoDownload executeScript(content_script)', arguments);
+          // Sometimes I get an error, "cannot access contents of the page".
+          // No idea why.
+          if (chrome.runtime.lastError) {
+            return setTimeout(() => autoDownload(i, retry + 1), 10000);
+          }
           chrome.tabs.executeScript(tab.id, {code: `getDownload(${i})`}, function() {
             console.log('autoDownload executeScript(getDownload)', arguments);
+            if (chrome.runtime.lastError) {
+              return setTimeout(() => autoDownload(i, retry + 1), 10000);
+            }
             waitForAuthOrDownload(tab.id, i);
           });
         });

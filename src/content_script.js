@@ -1,12 +1,11 @@
 function getLeafs(txt, requireVisible) {
   // Find the leaf nodes that are direct parents of the matching text,
   // optionally requiring them to be visible (tested with positive offsetTop).
-  return Array.from(document.getElementsByTagName('div'))
+  return Array.from(document.querySelectorAll('*'))
     .filter(
       x => (!requireVisible || x.offsetTop > 0) &&
-        Array.from(x.childNodes)
-          .filter(child => child.nodeType == x.TEXT_NODE && x.innerText === txt)
-          .length > 0
+        (x.innerText || '').toLowerCase() == txt.toLowerCase() &&
+        [...x.childNodes].filter(child => child.nodeType == x.TEXT_NODE).length > 0
     )
 }
 
@@ -32,8 +31,11 @@ function login() {
     setTimeout(login, 1000);
   } else {
     passwd.value = 'XXX FILL ME IN';
+    console.log('filled in');
+    //passwd.form.submit();
     var submit = document.getElementById('passwordNext') ||
-      document.querySelector('input[type="submit"]');
+      document.querySelector('input[type="submit"]')
+    ;
     submit.click();
   }
 }
