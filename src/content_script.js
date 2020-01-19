@@ -10,18 +10,24 @@ function getLeafs(txt, requireVisible) {
   );
 }
 
+function getDownloadButtons() {
+  return [
+    ...document.querySelectorAll('[isfullscreen] a[aria-label="Download"')
+  ].filter(elt => elt.offsetParent);
+}
+
 function getDownload2(i) {
   // Doesn't instantaneously show.
-  if (getLeafs("Download", true).length < 3)
-    setTimeout(() => getDownload2(i), 1000);
-  else if (i >= getLeafs("Download", true).length)
+  const downloadButtons = getDownloadButtons();
+  if (downloadButtons.length < 3) setTimeout(() => getDownload2(i), 1000);
+  else if (i >= downloadButtons.length)
     alert("Done with all the Google Downloads!");
-  else getLeafs("Download", true)[i].click();
+  else downloadButtons[i].click();
 }
 
 function getDownload(i) {
-  if (getLeafs("Download", true).length == 0)
-    getLeafs("Show exports", false)[0].click();
+  const downloadButtons = getDownloadButtons();
+  if (downloadButtons.length < 3) getLeafs("Show exports", false)[0].click();
   getDownload2(i);
 }
 

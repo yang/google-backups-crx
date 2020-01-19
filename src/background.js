@@ -1,3 +1,5 @@
+const START_INDEX = 0;
+
 function waitForAuthOrDownload(theTabId, i) {
   var onTabs;
   chrome.tabs.onUpdated.addListener(
@@ -95,5 +97,5 @@ function autoDownload(i, retry = 0) {
 }
 
 chrome.browserAction.onClicked.addListener(function(tab) {
-  autoDownload(0);
+  autoDownload(START_INDEX);
 });
